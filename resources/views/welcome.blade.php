@@ -66,30 +66,32 @@
                         <p>Isi data diri dan kami siapkan pengalaman terbaikmu.</p>
                     </div>
 
-                    <form id="registration-form">
+                    <form id="registration-form" method="POST" action="{{ route('registrations.store') }}">
+                        @csrf
+
                         <div class="field">
                             <label for="full-name">Nama lengkap</label>
-                            <input id="full-name" name="full_name" type="text" placeholder="Nama sesuai identitas" autocomplete="name" required>
+                            <input id="full-name" name="full_name" type="text" placeholder="Nama sesuai identitas" autocomplete="name" value="{{ old('full_name') }}" required>
                         </div>
 
                         <div class="field">
                             <label for="email">Email</label>
-                            <input id="email" name="email" type="email" placeholder="nama@email.com" autocomplete="email" required>
+                            <input id="email" name="email" type="email" placeholder="nama@email.com" autocomplete="email" value="{{ old('email') }}" required>
                         </div>
 
                         <div class="field">
                             <label for="phone">Nomor WhatsApp</label>
-                            <input id="phone" name="phone" type="tel" placeholder="08xx xxxx xxxx" autocomplete="tel" required>
+                            <input id="phone" name="phone" type="tel" placeholder="08xx xxxx xxxx" autocomplete="tel" value="{{ old('phone') }}" required>
                         </div>
 
                         <div class="field">
                             <label for="quantity">Jumlah tiket</label>
                             <div class="select-wrap">
                                 <select id="quantity" name="quantity" aria-label="Jumlah tiket">
-                                    <option value="1">1 tiket</option>
-                                    <option value="2">2 tiket</option>
-                                    <option value="3">3 tiket</option>
-                                    <option value="4">4 tiket</option>
+                                    <option value="1" @selected(old('quantity', '1') === '1')>1 tiket</option>
+                                    <option value="2" @selected(old('quantity') === '2')>2 tiket</option>
+                                    <option value="3" @selected(old('quantity') === '3')>3 tiket</option>
+                                    <option value="4" @selected(old('quantity') === '4')>4 tiket</option>
                                 </select>
                                 <span aria-hidden="true">⌄</span>
                             </div>
@@ -108,7 +110,12 @@
 
                         <button class="submit-button" type="submit">Daftar sekarang <span aria-hidden="true">→</span></button>
                         <p class="form-note">Dengan mendaftar, kamu menyetujui syarat dan ketentuan acara.</p>
-                        <p class="form-message" id="form-message" role="status" aria-live="polite" hidden></p>
+                        @if (session('success'))
+                            <p class="form-message" role="status" aria-live="polite">{{ session('success') }}</p>
+                        @endif
+                        @if ($errors->any())
+                            <p class="form-message" role="alert">{{ $errors->first() }}</p>
+                        @endif
                     </form>
                 </section>
             </div>
