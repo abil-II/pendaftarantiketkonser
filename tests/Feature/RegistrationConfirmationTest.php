@@ -15,7 +15,11 @@ it('includes the registrant and ticket details in the confirmation email', funct
     expect($content)
         ->toContain('Nadia Putri')
         ->toContain('Senja di Kota')
-        ->toContain('2')
+        ->toContain('PENDAFTARAN BERHASIL')
+        ->toContain('Ringkasan tiket')
+        ->toContain('Sabtu, 28 November 2026')
+        ->toContain('Lapangan Purnawira, Jakarta Selatan')
         ->toContain('Rp 500.000')
-        ->toContain('08123456789');
+        ->toContain('08123456789')
+        ->toContain('bukan bukti pembayaran atau tiket masuk');
 });
