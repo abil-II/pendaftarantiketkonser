@@ -108,7 +108,7 @@
                             </div>
                         </div>
 
-                        <button class="submit-button" type="submit">Daftar sekarang <span aria-hidden="true">→</span></button>
+                        <button class="submit-button" type="submit">Beli sekarang <span aria-hidden="true">→</span></button>
                         <p class="form-note">Dengan mendaftar, kamu menyetujui syarat dan ketentuan acara.</p>
                         @if (session('success'))
                             <p class="form-message" role="status" aria-live="polite">{{ session('success') }}</p>
@@ -117,6 +117,19 @@
                             <p class="form-message" role="alert">{{ $errors->first() }}</p>
                         @endif
                     </form>
+
+                    @if (session('success'))
+                        <dialog class="success-dialog" id="registration-success" aria-labelledby="registration-success-title">
+                            <div class="success-dialog-content">
+                                <span class="success-dialog-icon" aria-hidden="true">✓</span>
+                                <h2 id="registration-success-title">Pendaftaran berhasil!</h2>
+                                <p>Detail tiket telah dikirim ke emailmu.</p>
+                                <form method="dialog">
+                                    <button class="success-dialog-button" type="submit">Mengerti</button>
+                                </form>
+                            </div>
+                        </dialog>
+                    @endif
                 </section>
             </div>
 

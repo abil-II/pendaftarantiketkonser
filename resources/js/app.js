@@ -13,3 +13,9 @@ const updateTotal = () => {
 };
 
 quantitySelect.addEventListener('change', updateTotal);
+
+const registrationSuccessDialog = document.querySelector('#registration-success');
+
+if (registrationSuccessDialog instanceof HTMLDialogElement) {
+    registrationSuccessDialog.showModal();
+}

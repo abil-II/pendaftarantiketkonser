@@ -6,15 +6,16 @@ use Illuminate\Support\Facades\Mail;
 it('sends a confirmation email to a valid registrant', function () {
     Mail::fake();
 
-    $response = $this->post(route('registrations.store'), [
+    $response = $this->followingRedirects()->post(route('registrations.store'), [
         'full_name' => 'Nadia Putri',
         'email' => 'nadia@example.com',
         'phone' => '08123456789',
         'quantity' => '2',
     ]);
 
-    $response->assertRedirect(route('home'));
-    $response->assertSessionHas('success');
+    $response->assertOk();
+    $response->assertSee('Pendaftaran berhasil!');
+    $response->assertSee('Detail tiket telah dikirim ke emailmu.');
 
     Mail::assertSent(
         RegistrationConfirmation::class,
@@ -28,14 +29,15 @@ it('sends a confirmation email to a valid registrant', function () {
 it('does not send a confirmation email when registration data is invalid', function () {
     Mail::fake();
 
-    $response = $this->post(route('registrations.store'), [
+    $response = $this->followingRedirects()->post(route('registrations.store'), [
         'full_name' => 'Nadia Putri',
         'email' => 'not-an-email',
         'phone' => '08123456789',
         'quantity' => '5',
     ]);
 
-    $response->assertSessionHasErrors(['email', 'quantity']);
+    $response->assertSee('role="alert"', false);
+    $response->assertDontSee('registration-success');
 
     Mail::assertNothingSent();
 });
