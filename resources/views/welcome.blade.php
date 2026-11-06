@@ -48,7 +48,7 @@
                             </div>
                             <div class="detail-row">
                                 <span class="detail-icon" aria-hidden="true">⌖</span>
-                                <span><strong>Lapangan Purnawira</strong><small>Jakarta Selatan</small></span>
+                                <span><strong>Gunung Sari</strong><small>Surabaya</small></span>
                             </div>
                         </div>
 
