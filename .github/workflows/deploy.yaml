@@ -125,12 +125,22 @@ jobs:
           port: 22
           script: |
             cd /home/gambitneverfold-nada/htdocs/nada.gambitneverfold.web.id
-            git pull origin main
 
+            # Izinkan direktori aman
+            git config --global --add safe.directory /home/gambitneverfold-nada/htdocs/nada.gambitneverfold.web.id
+
+            # Bersihkan perubahan lokal & paksa tarik dari branch main
+            git reset --hard
+            git checkout main
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Ekstraksi Vendor & Build Assets
             rm -rf vendor public/build
             tar -xzf build_assets.tar.gz
             rm -f build_assets.tar.gz
 
+            # Clear & Cache Laravel
             rm -f bootstrap/cache/packages.php
             rm -f bootstrap/cache/services.php
 
