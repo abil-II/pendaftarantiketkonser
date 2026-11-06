@@ -71,7 +71,7 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: ""
 
-  deploy:
+deploy:
     name: Deploy to Live Hosting
     needs: laravel-tests
     runs-on: ubuntu-latest
@@ -89,27 +89,32 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install NPM Dependencies & Build Assets
+        run: |
+          npm ci
+          npm run build
 
       - name: Install Production Composer Dependencies
         run: composer install --no-dev --optimize-autoloader --prefer-dist --no-ansi --no-interaction --no-progress
 
-      - name: Package Vendor Directory
-        run: tar -czf vendor.tar.gz vendor
+      # Package vendor DAN public/build agar asset Vite terupdate di server
+      - name: Package Vendor and Build Directory
+        run: tar -czf build_assets.tar.gz vendor public/build
 
-      - name: Upload Vendor Package to Server
+      - name: Upload Package to Server
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
-          source: "vendor.tar.gz"
+          source: "build_assets.tar.gz"
           target: "/home/gambitneverfold-nada/htdocs/nada.gambitneverfold.web.id"
 
       - name: Deploy via SSH
@@ -123,9 +128,9 @@ jobs:
             cd /home/gambitneverfold-nada/htdocs/nada.gambitneverfold.web.id
             git pull origin main
 
-            rm -rf vendor
-            tar -xzf vendor.tar.gz
-            rm -f vendor.tar.gz
+            rm -rf vendor public/build
+            tar -xzf build_assets.tar.gz
+            rm -f build_assets.tar.gz
 
             rm -f bootstrap/cache/packages.php
             rm -f bootstrap/cache/services.php
@@ -135,3 +140,5 @@ jobs:
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+
+            
