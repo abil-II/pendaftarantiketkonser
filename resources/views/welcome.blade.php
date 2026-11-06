@@ -62,7 +62,7 @@
                 <section class="form-card" id="daftar" aria-labelledby="form-title">
                     <div class="form-heading">
                         <span class="step-label">SATU LANGKAH LAGI</span>
-                        <h2 id="form-title">Amankan tiketmu</h2>
+                        <h2 id="form-title">Amankan tiketmu?</h2>
                         <p>Isi data diri dan kami siapkan pengalaman terbaikmu.</p>
                     </div>
 
