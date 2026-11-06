@@ -26,7 +26,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4.1'
+          php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, mysql, bcmath, filter, zip, pdo, pdo_mysql
           tools: composer:v2
           coverage: none
@@ -53,7 +53,6 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      # DIMAJUKAN: Build Vite assets sebelum PHPUnit/Pest running test
       - name: Install NPM Dependencies & Build Assets
         run: |
           npm ci
@@ -71,7 +70,8 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: ""
 
-deploy:
+  # Perhatikan spasi di bawah ini: deploy SEJAJAR dengan laravel-tests (masuk 2 spasi di bawah jobs)
+  deploy:
     name: Deploy to Live Hosting
     needs: laravel-tests
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ deploy:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4.1'
+          php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, bcmath, filter, zip
           tools: composer:v2
           coverage: none
@@ -103,7 +103,6 @@ deploy:
       - name: Install Production Composer Dependencies
         run: composer install --no-dev --optimize-autoloader --prefer-dist --no-ansi --no-interaction --no-progress
 
-      # Package vendor DAN public/build agar asset Vite terupdate di server
       - name: Package Vendor and Build Directory
         run: tar -czf build_assets.tar.gz vendor public/build
 
@@ -140,5 +139,3 @@ deploy:
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-            
